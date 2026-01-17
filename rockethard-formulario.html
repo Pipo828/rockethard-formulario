@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicio Técnico RocketHard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF6B00;
+            --primary-dark: #E55A00;
+            --primary-light: #FF8C42;
+            --secondary: #333333;
+            --secondary-light: #666666;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            --border: #E0E0E0;
+            --success: #27AE60;
+            --error: #E74C3C;
+            --warning: #F39C12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, system-ui, sans-serif;
+        }
+        
+        body {
+            background: var(--light);
+            color: var(--secondary);
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        .mobile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .brand-name h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        
+        .brand-name p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .contact-info-mobile {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+        }
+        
+        .contact-item-mobile {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+        
+        .contact-item-mobile i {
+            font-size: 12px;
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .container {
+            padding: 0;
+        }
+        
+        .form-container {
+            max-width: 100%;
+            padding: 20px 16px;
+        }
+        
+        .mobile-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            position: relative;
+            padding: 0 10px;
+        }
+        
+        .mobile-progress::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            right: 40px;
+            height: 2px;
+            background: var(--border);
+            z-index: 1;
+        }
+        
+        .mobile-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .mobile-step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 2px solid var(--border);
+            color: var(--secondary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .mobile-step.active .mobile-step-circle {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .mobile-step-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--secondary-light);
+        }
+        
+        .mobile-step.active .mobile-step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .form-step {
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .step-title i {
+            font-size: 18px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--secondary);
+        }
+        
+        .required {
+            color: var(--error);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--white);
+            transition: all 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.4;
+        }
+        
+        .radio-group-mobile {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .radio-option-mobile {
+            position: relative;
+        }
+        
+        .radio-option-mobile input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .radio-option-mobile label {
+            display: block;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--white);
+            font-weight: normal;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .radio-option-mobile input:checked + label {
+            border-color: var(--primary);
+            background: rgba(255, 107, 0, 0.05);
+            font-weight: 600;
+        }
+        
+        .radio-option-mobile label::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            margin-right: 12px;
+            vertical-align: middle;
+            transition: all 0.2s;
+        }
+        
+        .radio-option-mobile input:checked + label::before {
+            border-color: var(--primary);
+            background: var(--primary);
+            box-shadow: inset 0 0 0 4px var(--white);
+        }
+        
+        .data-preview {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 16px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .data-preview.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .data-preview-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .data-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .data-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+        
+        .data-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .signature-area {
+            background: var(--white);
+            padding: 16px;
+            border-radius: 10px;
+            border: 2px dashed var(--border);
+            margin: 20px 0;
+        }
+        
+        .signature-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary);
+        }
+        
+        .signature-instructions {
+            font-size: 14px;
+            color: var(--secondary-light);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        
+        .signature-canvas-container {
+            border: 2px solid var(--border);
+            background: var(--white);
+            height: 180px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            touch-action: none;
+        }
+        
+        #signatureCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .signature-actions-mobile {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .signature-btn-mobile {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .clear-btn {
+            background: var(--error);
+            color: var(--white);
+        }
+        
+        .preview-btn {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .signature-preview-mobile {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--white);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .signature-preview-mobile.active {
+            display: block;
+        }
+        
+        #signatureImage img {
+            max-width: 100%;
+            max-height: 80px;
+            margin: 8px 0;
+        }
+        
+        /* CHECKBOX SIMPLIFICADO Y FUNCIONAL */
+        .simple-checkbox {
+            margin: 15px 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .simple-checkbox input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin: 0;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .simple-checkbox label {
+            font-size: 15px;
+            font-weight: normal;
+            color: var(--secondary);
+            line-height: 1.4;
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .terms-mobile {
+            background: var(--light);
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .terms-title-mobile {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        
+        .terms-content-mobile {
+            font-size: 13px;
+            color: var(--secondary-light);
+        }
+        
+        .terms-content-mobile ul {
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+        
+        .terms-content-mobile li {
+            margin-bottom: 8px;
+        }
+        
+        .mobile-nav {
+            position: sticky;
+            bottom: 0;
+            background: var(--white);
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .prev-btn-mobile {
+            background: var(--light);
+            color: var(--secondary);
+            border: 2px solid var(--border);
+        }
+        
+        .next-btn-mobile, .submit-btn-mobile {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .next-btn-mobile:hover, .submit-btn-mobile:hover {
+            background: var(--primary-dark);
+        }
+        
+        .alert-message {
+            padding: 16px;
+            border-radius: 10px;
+            margin: 16px 0;
+            font-size: 14px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .alert-message.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .mobile-footer {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 24px 16px;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        
+        .footer-section {
+            margin-bottom: 20px;
+        }
+        
+        .footer-section h3 {
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-section p {
+            margin-bottom: 8px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .footer-link {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .copyright {
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        @media (min-width: 768px) {
+            .form-container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 24px;
+            }
+            
+            .mobile-header {
+                padding: 20px;
+            }
+            
+            .logo {
+                height: 50px;
+            }
+            
+            .brand-name h1 {
+                font-size: 22px;
+            }
+            
+            .contact-info-mobile {
+                font-size: 14px;
+            }
+            
+            .step-title {
+                font-size: 22px;
+            }
+            
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .signature-actions-mobile {
+                flex-direction: row;
+            }
+            
+            .signature-btn-mobile {
+                flex: 1;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .mobile-header {
+                border-radius: 12px 12px 0 0;
+                margin-top: 20px;
+            }
+            
+            .mobile-footer {
+                border-radius: 0 0 12px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://wa.me/5491162626262" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <header class="mobile-header">
+        <div class="logo-bar">
+            <img src="https://rockethard.com.ar/wp-content/uploads/2021/11/cropped-rockethard-logo-header.png" 
+                 alt="RocketHard" class="logo">
+            <div class="brand-name">
+                <h1>Servicio Técnico</h1>
+                <p>Reparación especializada</p>
+            </div>
+        </div>
+        
+        <div class="contact-info-mobile">
+            <div class="contact-item-mobile">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Maipú 592, Merlo</span>
+            </div>
+            <div class="contact-item-mobile">
+                <i class="fas fa-clock"></i>
+                <span>Lun-Vie 10-19hs</span>
+            </div>
+            <div class="contact-item-mobile">
+                <i class="fas fa-envelope"></i>
+                <span>ventas@rockethard.com.ar</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="form-container">
+            <div class="mobile-progress">
+                <div class="mobile-step active" data-step="1">
+                    <div class="mobile-step-circle">1</div>
+                    <div class="mobile-step-label">Datos</div>
+                </div>
+                <div class="mobile-step" data-step="2">
+                    <div class="mobile-step-circle">2</div>
+                    <div class="mobile-step-label">Equipo</div>
+                </div>
+                <div class="mobile-step" data-step="3">
+                    <div class="mobile-step-circle">3</div>
+                    <div class="mobile-step-label">Firma</div>
+                </div>
+                <div class="mobile-step" data-step="4">
+                    <div class="mobile-step-circle">4</div>
+                    <div class="mobile-step-label">Confirmar</div>
+                </div>
+            </div>
+            
+            <form id="mobileForm">
+                <div class="form-step active" id="mobileStep1">
+                    <h2 class="step-title"><i class="fas fa-user"></i> Tus Datos</h2>
+                    
+                    <div class="form-group">
+                        <label for="mobileNombre">Nombre y Apellido <span class="required">*</span></label>
+                        <input type="text" id="mobileNombre" name="nombre" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobileDni">DNI <span class="required">*</span></label>
+                        <input type="text" id="mobileDni" name="dni" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobileEmail">Email <span class="required">*</span></label>
+                        <input type="email" id="mobileEmail" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobileCelular">Celular <span class="required">*</span></label>
+                        <input type="tel" id="mobileCelular" name="celular" required>
+                    </div>
+                </div>
+                
+                <div class="form-step" id="mobileStep2">
+                    <h2 class="step-title"><i class="fas fa-laptop"></i> Tu Equipo</h2>
+                    
+                    <div class="form-group">
+                        <label for="mobileModelo">Modelo del equipo <span class="required">*</span></label>
+                        <input type="text" id="mobileModelo" name="modelo" placeholder="Ej: iPhone 12, Samsung S21, etc." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobileProblema">Problema que presenta <span class="required">*</span></label>
+                        <textarea id="mobileProblema" name="problema" placeholder="Describí el problema con detalles..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>¿Necesitás backup de tu información? <span class="required">*</span></label>
+                        <div class="radio-group-mobile">
+                            <div class="radio-option-mobile">
+                                <input type="radio" id="mobileBackupSi" name="backup" value="Sí" required>
+                                <label for="mobileBackupSi">Sí, necesito respaldo</label>
+                            </div>
+                            <div class="radio-option-mobile">
+                                <input type="radio" id="mobileBackupNo" name="backup" value="No">
+                                <label for="mobileBackupNo">No, no necesito respaldo</label>
+                            </div>
+                        </div>
+                        <p style="margin-top: 8px; font-size: 13px; color: var(--secondary-light);">
+                            <i class="fas fa-info-circle"></i> Los backups pueden tener errores si el equipo está muy afectado.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="form-step" id="mobileStep3">
+                    <h2 class="step-title"><i class="fas fa-signature"></i> Tu Firma</h2>
+                    
+                    <div class="data-preview" id="mobileDataPreview">
+                        <div class="data-preview-title">
+                            <i class="fas fa-id-card"></i> Tus datos para la firma
+                        </div>
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Nombre</div>
+                                <div class="data-value" id="previewMobileNombre">-</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">DNI</div>
+                                <div class="data-value" id="previewMobileDni">-</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Email</div>
+                                <div class="data-value" id="previewMobileEmail">-</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Celular</div>
+                                <div class="data-value" id="previewMobileCelular">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="signature-area">
+                        <div class="signature-title">
+                            <i class="fas fa-pen"></i> Firma digital
+                        </div>
+                        
+                        <div class="signature-instructions">
+                            Deslizá tu dedo para firmar en el recuadro. Tu firma confirma que los datos son correctos.
+                        </div>
+                        
+                        <div class="signature-canvas-container">
+                            <canvas id="signatureCanvas"></canvas>
+                        </div>
+                        
+                        <div class="signature-actions-mobile">
+                            <button type="button" class="signature-btn-mobile clear-btn" id="clearSignature">
+                                <i class="fas fa-trash-alt"></i> Limpiar
+                            </button>
+                            <button type="button" class="signature-btn-mobile preview-btn" id="previewSignature">
+                                <i class="fas fa-eye"></i> Ver
+                            </button>
+                        </div>
+                        
+                        <div class="signature-preview-mobile" id="signaturePreview">
+                            <strong>Vista previa de tu firma:</strong>
+                            <div id="signatureImage"></div>
+                        </div>
+                        
+                        <!-- CHECKBOX SIMPLIFICADO Y FUNCIONAL -->
+                        <div class="simple-checkbox">
+                            <input type="checkbox" id="confirmFirma" name="confirmFirma" required>
+                            <label for="confirmFirma">
+                                Confirmo que esta es mi firma digital y que representa mi consentimiento
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-step" id="mobileStep4">
+                    <h2 class="step-title"><i class="fas fa-file-contract"></i> Términos</h2>
+                    
+                    <div class="terms-mobile">
+                        <div class="terms-title-mobile">Condiciones del Servicio</div>
+                        <div class="terms-content-mobile">
+                            <p>Al firmar, aceptás las siguientes condiciones:</p>
+                            <ul>
+                                <li><strong>Presupuestos:</strong> Hasta 72 horas hábiles para entregar.</li>
+                                <li><strong>Aceptación:</strong> 48 horas hábiles para aceptar el presupuesto.</li>
+                                <li><strong>Backup:</strong> Puede tener errores si el equipo está muy afectado.</li>
+                                <li><strong>Garantía:</strong> 90 días desde la fecha de entrega.</li>
+                                <li><strong>Retiro:</strong> 90 días para retirar el equipo.</li>
+                                <li><strong>Horarios:</strong> Retiro Lunes a Viernes 10-19hs, Sábados 10-14hs con coordinación.</li>
+                                <li><strong>Firma Digital:</strong> Tiene validez jurídica equivalente a firma manuscrita.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- CHECKBOX SIMPLIFICADO Y FUNCIONAL -->
+                    <div class="simple-checkbox">
+                        <input type="checkbox" id="aceptoTerminos" name="acepto" required>
+                        <label for="aceptoTerminos">
+                            He leído y acepto todos los términos y condiciones
+                            <span class="required">*</span>
+                        </label>
+                    </div>
+                    
+                    <div class="data-preview" style="display: block;">
+                        <div class="data-preview-title">
+                            <i class="fas fa-check-circle"></i> Resumen de tu solicitud
+                        </div>
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <div class="data-label">Cliente</div>
+                                <div class="data-value" id="resumenNombre">-</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Equipo</div>
+                                <div class="data-value" id="resumenModelo">-</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Backup</div>
+                                <div class="data-value" id="resumenBackup">-</div>
+                            </div>
+                            <div class="data-item">
+                                <div class="data-label">Fecha</div>
+                                <div class="data-value" id="resumenFecha">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert-message" id="mobileMessage"></div>
+            </form>
+        </div>
+        
+        <div class="mobile-nav">
+            <button type="button" class="nav-btn prev-btn-mobile" id="mobilePrevBtn">
+                <i class="fas fa-arrow-left"></i> Atrás
+            </button>
+            <button type="button" class="nav-btn next-btn-mobile" id="mobileNextBtn">
+                Siguiente <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="submit" class="nav-btn submit-btn-mobile" id="mobileSubmitBtn" style="display: none;">
+                <i class="fas fa-paper-plane"></i> Enviar
+            </button>
+        </div>
+        
+        <footer class="mobile-footer">
+            <div class="footer-section">
+                <h3><i class="fas fa-map-marker-alt"></i> ¿Dónde estamos?</h3>
+                <p>Maipú 592, Merlo</p>
+                <p>Buenos Aires, Argentina</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3><i class="fas fa-clock"></i> Horarios</h3>
+                <p><strong>Lunes a Viernes:</strong> 10:00 a 19:00hs</p>
+                <p><strong>Sábados:</strong> 10:00 a 14:00hs</p>
+                <p>(Previa coordinación por WhatsApp)</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3><i class="fas fa-envelope"></i> Contacto</h3>
+                <p><strong>Email:</strong> ventas@rockethard.com.ar</p>
+                <p><strong>Servicio Técnico:</strong> Por este formulario</p>
+                <p><strong>WhatsApp:</strong> Coordinación de turnos</p>
+            </div>
+            
+            <div class="footer-links">
+                <a href="https://rockethard.com.ar/" class="footer-link" target="_blank">
+                    <i class="fas fa-globe"></i> Web
+                </a>
+                <a href="https://wa.me/5491162626262" class="footer-link" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="mailto:ventas@rockethard.com.ar" class="footer-link">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 RocketHard - Servicio Técnico Especializado</p>
+                <p>Formulario optimizado para dispositivos móviles</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando formulario...');
+            
+            // Configuración para mobile
+            let currentMobileStep = 1;
+            const totalSteps = 4;
+            
+            // Elementos de navegación
+            const mobilePrevBtn = document.getElementById('mobilePrevBtn');
+            const mobileNextBtn = document.getElementById('mobileNextBtn');
+            const mobileSubmitBtn = document.getElementById('mobileSubmitBtn');
+            const mobileSteps = document.querySelectorAll('.form-step');
+            const progressSteps = document.querySelectorAll('.mobile-step');
+            
+            // ==============================================
+            // TU URL DE APPS SCRIPT
+            // ==============================================
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1_IU48S7VHbLt06kr0Nw8QUEJStcZfHh9_CyTg6xeOmkAanRCUk6QUTYT9AGogpk4/exec';
+            // ==============================================
+            
+            // Mostrar/ocultar botones según el paso
+            function updateNavigation() {
+                console.log(`📍 Actualizando navegación: Paso ${currentMobileStep}`);
+                
+                // Botón anterior
+                mobilePrevBtn.style.display = currentMobileStep > 1 ? 'flex' : 'none';
+                
+                // Botón siguiente/enviar
+                if (currentMobileStep < totalSteps) {
+                    mobileNextBtn.style.display = 'flex';
+                    mobileSubmitBtn.style.display = 'none';
+                } else {
+                    mobileNextBtn.style.display = 'none';
+                    mobileSubmitBtn.style.display = 'flex';
+                }
+                
+                // Actualizar progreso visual
+                progressSteps.forEach((step, index) => {
+                    if (index + 1 <= currentMobileStep) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                });
+                
+                // Mostrar paso actual
+                mobileSteps.forEach(step => step.classList.remove('active'));
+                document.getElementById(`mobileStep${currentMobileStep}`).classList.add('active');
+                
+                // Actualizar datos en pasos específicos
+                if (currentMobileStep === 3) {
+                    updateMobileDataPreview();
+                    initSignatureCanvas();
+                } else if (currentMobileStep === 4) {
+                    updateResumen();
+                }
+            }
+            
+            // Navegación siguiente - SIMPLIFICADA
+            mobileNextBtn.addEventListener('click', function() {
+                console.log(`👉 Intentando avanzar del paso ${currentMobileStep}`);
+                
+                if (validateCurrentStep()) {
+                    if (currentMobileStep < totalSteps) {
+                        currentMobileStep++;
+                        updateNavigation();
+                        scrollToTop();
+                    }
+                }
+            });
+            
+            // Navegación anterior
+            mobilePrevBtn.addEventListener('click', function() {
+                if (currentMobileStep > 1) {
+                    currentMobileStep--;
+                    updateNavigation();
+                    scrollToTop();
+                }
+            });
+            
+            // VALIDACIÓN SIMPLIFICADA Y FUNCIONAL
+            function validateCurrentStep() {
+                console.log(`🔍 Validando paso ${currentMobileStep}`);
+                let isValid = true;
+                
+                // Paso 3: Validar firma y checkbox
+                if (currentMobileStep === 3) {
+                    // 1. Validar firma en canvas
+                    const canvas = document.getElementById('signatureCanvas');
+                    if (canvas) {
+                        const ctx = canvas.getContext('2d');
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const data = imageData.data;
+                        let hasDrawing = false;
+                        
+                        for (let i = 0; i < data.length; i += 4) {
+                            if (data[i] < 250 || data[i + 1] < 250 || data[i + 2] < 250) {
+                                hasDrawing = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!hasDrawing) {
+                            alert('⚠️ Por favor, dibujá tu firma en el recuadro antes de continuar.');
+                            isValid = false;
+                            canvas.style.border = '2px solid var(--error)';
+                        } else {
+                            canvas.style.border = '2px solid var(--border)';
+                        }
+                    }
+                    
+                    // 2. Validar checkbox de firma
+                    const confirmFirmaCheckbox = document.getElementById('confirmFirma');
+                    if (confirmFirmaCheckbox) {
+                        console.log('✅ Checkbox de firma encontrado:', confirmFirmaCheckbox.checked);
+                        if (!confirmFirmaCheckbox.checked) {
+                            alert('⚠️ Debés marcar la casilla para confirmar tu firma.');
+                            isValid = false;
+                            confirmFirmaCheckbox.focus();
+                        }
+                    } else {
+                        console.error('❌ Checkbox de firma NO encontrado');
+                    }
+                }
+                
+                // Paso 4: Validar checkbox de términos
+                if (currentMobileStep === 4) {
+                    const aceptoCheckbox = document.getElementById('aceptoTerminos');
+                    if (aceptoCheckbox) {
+                        console.log('✅ Checkbox de términos encontrado:', aceptoCheckbox.checked);
+                        if (!aceptoCheckbox.checked) {
+                            alert('⚠️ Debés aceptar los términos y condiciones para continuar.');
+                            isValid = false;
+                            aceptoCheckbox.focus();
+                        }
+                    } else {
+                        console.error('❌ Checkbox de términos NO encontrado');
+                    }
+                }
+                
+                // Validar campos de texto requeridos
+                const currentStepElement = document.getElementById(`mobileStep${currentMobileStep}`);
+                const requiredInputs = currentStepElement.querySelectorAll('input[required], textarea[required], select[required]');
+                
+                requiredInputs.forEach(input => {
+                    // Solo validar inputs de texto, no checkboxes
+                    if (input.type !== 'checkbox') {
+                        if (!input.checkValidity()) {
+                            input.style.borderColor = 'var(--error)';
+                            isValid = false;
+                            
+                            // Limpiar mensajes de error anteriores
+                            const existingError = input.parentNode.querySelector('.error-message');
+                            if (existingError) existingError.remove();
+                            
+                            // Crear nuevo mensaje de error
+                            const errorMsg = document.createElement('div');
+                            errorMsg.className = 'error-message';
+                            errorMsg.style.color = 'var(--error)';
+                            errorMsg.style.fontSize = '13px';
+                            errorMsg.style.marginTop = '5px';
+                            errorMsg.textContent = 'Este campo es obligatorio';
+                            input.parentNode.appendChild(errorMsg);
+                        } else {
+                            input.style.borderColor = 'var(--border)';
+                            const errorMsg = input.parentNode.querySelector('.error-message');
+                            if (errorMsg) errorMsg.remove();
+                        }
+                    }
+                });
+                
+                console.log(`✅ Validación completada: ${isValid ? 'PASÓ' : 'FALLÓ'}`);
+                return isValid;
+            }
+            
+            // Actualizar panel de datos
+            function updateMobileDataPreview() {
+                const nombre = document.getElementById('mobileNombre').value;
+                const dni = document.getElementById('mobileDni').value;
+                const email = document.getElementById('mobileEmail').value;
+                const celular = document.getElementById('mobileCelular').value;
+                
+                if (nombre && dni && email && celular) {
+                    document.getElementById('previewMobileNombre').textContent = nombre;
+                    document.getElementById('previewMobileDni').textContent = dni;
+                    document.getElementById('previewMobileEmail').textContent = email;
+                    document.getElementById('previewMobileCelular').textContent = celular;
+                    document.getElementById('mobileDataPreview').classList.add('active');
+                } else {
+                    document.getElementById('mobileDataPreview').classList.remove('active');
+                }
+            }
+            
+            // Actualizar resumen final
+            function updateResumen() {
+                document.getElementById('resumenNombre').textContent = document.getElementById('mobileNombre').value || '-';
+                document.getElementById('resumenModelo').textContent = document.getElementById('mobileModelo').value || '-';
+                
+                const backupSi = document.getElementById('mobileBackupSi');
+                const backupNo = document.getElementById('mobileBackupNo');
+                let backupValue = '-';
+                if (backupSi && backupSi.checked) backupValue = 'Sí';
+                if (backupNo && backupNo.checked) backupValue = 'No';
+                document.getElementById('resumenBackup').textContent = backupValue;
+                
+                const ahora = new Date();
+                document.getElementById('resumenFecha').textContent = 
+                    ahora.toLocaleDateString('es-AR') + ' ' + ahora.toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'});
+            }
+            
+            // ==============================================
+            // SISTEMA DE FIRMA SIMPLIFICADO
+            // ==============================================
+            let signatureCanvas, signatureCtx;
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            
+            function initSignatureCanvas() {
+                signatureCanvas = document.getElementById('signatureCanvas');
+                if (!signatureCanvas) {
+                    console.error('❌ No se encontró el canvas de firma');
+                    return;
+                }
+                
+                signatureCtx = signatureCanvas.getContext('2d');
+                if (!signatureCtx) {
+                    console.error('❌ No se pudo obtener el contexto 2D');
+                    return;
+                }
+                
+                // Configurar tamaño del canvas
+                const container = signatureCanvas.parentElement;
+                const rect = container.getBoundingClientRect();
+                signatureCanvas.width = rect.width;
+                signatureCanvas.height = rect.height;
+                
+                // Limpiar canvas inicial
+                signatureCtx.fillStyle = '#FFFFFF';
+                signatureCtx.fillRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+                signatureCtx.strokeStyle = '#000000';
+                signatureCtx.lineWidth = 2;
+                signatureCtx.lineCap = 'round';
+                signatureCtx.lineJoin = 'round';
+                
+                // Configurar eventos
+                signatureCanvas.addEventListener('mousedown', startDrawing);
+                signatureCanvas.addEventListener('mousemove', draw);
+                signatureCanvas.addEventListener('mouseup', stopDrawing);
+                signatureCanvas.addEventListener('mouseout', stopDrawing);
+                
+                signatureCanvas.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    if (e.touches.length === 1) {
+                        startDrawing(e.touches[0]);
+                    }
+                });
+                
+                signatureCanvas.addEventListener('touchmove', function(e) {
+                    e.preventDefault();
+                    if (e.touches.length === 1) {
+                        draw(e.touches[0]);
+                    }
+                });
+                
+                signatureCanvas.addEventListener('touchend', stopDrawing);
+                
+                console.log('✅ Canvas de firma inicializado');
+            }
+            
+            function startDrawing(e) {
+                isDrawing = true;
+                const rect = signatureCanvas.getBoundingClientRect();
+                lastX = e.clientX - rect.left;
+                lastY = e.clientY - rect.top;
+                signatureCtx.beginPath();
+                signatureCtx.moveTo(lastX, lastY);
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                e.preventDefault();
+                
+                const rect = signatureCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                signatureCtx.lineTo(x, y);
+                signatureCtx.stroke();
+                
+                lastX = x;
+                lastY = y;
+            }
+            
+            function stopDrawing() {
+                isDrawing = false;
+            }
+            
+            // Botón limpiar firma
+            document.getElementById('clearSignature').addEventListener('click', function() {
+                signatureCtx.fillStyle = '#FFFFFF';
+                signatureCtx.fillRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+                document.getElementById('signaturePreview').classList.remove('active');
+            });
+            
+            // Botón vista previa firma
+            document.getElementById('previewSignature').addEventListener('click', function() {
+                const dataUrl = signatureCanvas.toDataURL('image/png');
+                document.getElementById('signatureImage').innerHTML = 
+                    `<img src="${dataUrl}" alt="Firma" style="max-width: 300px; max-height: 100px;">`;
+                document.getElementById('signaturePreview').classList.add('active');
+            });
+            
+            // Escuchar cambios en los campos de datos
+            ['mobileNombre', 'mobileDni', 'mobileEmail', 'mobileCelular'].forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('input', updateMobileDataPreview);
+                }
+            });
+            
+            // ENVÍO DEL FORMULARIO - VERSIÓN SIMPLIFICADA
+            mobileSubmitBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                
+                console.log('🔄 Iniciando envío del formulario...');
+                
+                if (!validateCurrentStep()) {
+                    alert('⚠️ Por favor, completá todos los campos requeridos.');
+                    return;
+                }
+                
+                // Cambiar estado del botón
+                mobileSubmitBtn.disabled = true;
+                mobileSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                
+                try {
+                    // Recopilar datos del formulario
+                    const formData = {
+                        nombre: document.getElementById('mobileNombre').value,
+                        dni: document.getElementById('mobileDni').value,
+                        email: document.getElementById('mobileEmail').value,
+                        celular: document.getElementById('mobileCelular').value,
+                        modelo: document.getElementById('mobileModelo').value,
+                        problema: document.getElementById('mobileProblema').value,
+                        backup: document.querySelector('input[name="backup"]:checked')?.value || 'No',
+                        acepto: document.getElementById('aceptoTerminos').checked ? 'Sí' : 'No',
+                        confirmFirma: document.getElementById('confirmFirma').checked ? 'Sí' : 'No',
+                        fecha: new Date().toLocaleString('es-AR')
+                    };
+                    
+                    // Agregar firma si existe
+                    if (signatureCanvas) {
+                        formData.firma = signatureCanvas.toDataURL('image/png');
+                    }
+                    
+                    console.log('📤 Enviando datos:', formData);
+                    
+                    // Enviar a Google Apps Script
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const result = await response.json();
+                    console.log('✅ Respuesta:', result);
+                    
+                    // Mostrar mensaje de éxito
+                    const mensajeDiv = document.getElementById('mobileMessage');
+                    mensajeDiv.className = 'alert-message alert-success show';
+                    mensajeDiv.innerHTML = `
+                        <strong>✅ ¡Solicitud enviada exitosamente!</strong><br>
+                        <small>Te hemos enviado un email de confirmación.</small><br>
+                        <small>ID de solicitud: ${result.registroId || result.id || 'N/A'}</small>
+                    `;
+                    
+                    // Resetear formulario
+                    document.getElementById('mobileForm').reset();
+                    if (signatureCanvas) {
+                        signatureCtx.fillStyle = '#FFFFFF';
+                        signatureCtx.fillRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+                    }
+                    
+                    // Volver al primer paso
+                    currentMobileStep = 1;
+                    updateNavigation();
+                    
+                    // Scroll al mensaje
+                    mensajeDiv.scrollIntoView({ behavior: 'smooth' });
+                    
+                } catch (error) {
+                    console.error('❌ Error:', error);
+                    
+                    const mensajeDiv = document.getElementById('mobileMessage');
+                    mensajeDiv.className = 'alert-message alert-error show';
+                    mensajeDiv.innerHTML = `
+                        <strong>❌ Error al enviar</strong><br>
+                        <small>Por favor, intentá nuevamente o contactanos por WhatsApp.</small>
+                    `;
+                    
+                } finally {
+                    // Restaurar botón
+                    mobileSubmitBtn.disabled = false;
+                    mobileSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar';
+                    
+                    // Ocultar mensaje después de 10 segundos
+                    setTimeout(() => {
+                        document.getElementById('mobileMessage').classList.remove('show');
+                    }, 10000);
+                }
+            });
+            
+            // Función para scroll suave al top
+            function scrollToTop() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            // Inicializar
+            updateNavigation();
+            
+            // Escuchar cambios para resumen
+            document.getElementById('mobileModelo').addEventListener('input', updateResumen);
+            const backupInputs = document.querySelectorAll('input[name="backup"]');
+            backupInputs.forEach(input => {
+                input.addEventListener('change', updateResumen);
+            });
+            
+            // Inicializar canvas
+            setTimeout(initSignatureCanvas, 100);
+            
+            // DEBUG: Verificar que los checkboxes existen
+            console.log('🔍 Checkbox de firma:', document.getElementById('confirmFirma'));
+            console.log('🔍 Checkbox de términos:', document.getElementById('aceptoTerminos'));
+        });
+    </script>
+</body>
+</html>
